@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+	compileSdk android_build.compile_sdk
+
+	defaultConfig {
+		namespace "com.artech.testaccionessd.actionsdefaultphigh"
+		applicationId "com.artech.testaccionessd.actionsdefaultphigh"
+		versionCode 10
+		versionName "1.0"
+		minSdk android_build.min_sdk
+		targetSdk android_build.target_sdk
+
+		multiDexEnabled true
+		multiDexKeepFile file('multidex-config.txt')
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+	}
+
+	signingConfigs {
+		release {
+			storeFile file(String.valueOf(System.getenv("KEYSTORE_FILE")))
+			storePassword System.getenv("KEYSTORE_PASSWORD")
+			keyAlias System.getenv("KEY_ALIAS")
+			keyPassword System.getenv("KEY_PASSWORD")
+		}
+	}
+
+	buildTypes {
+		release {
+			signingConfig signingConfigs.release
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility android_build.java_version
+		targetCompatibility android_build.java_version
+	}
+
+	packagingOptions {
+		exclude 'META-INF/proguard/androidx-annotations.pro'
+	}
+
+	lintOptions {
+		disable "Instantiatable"
+	}
+
+}
+
+dependencies {
+	 implementation project(':CoreExternalObjects')
+	 implementation project(':CoreUserControls')
+	 implementation project(':FlexibleClient')
+	 implementation project(':SmartGridLib')
+	 implementation project(':SqlDroidBase')
+	 androidTestImplementation project(':UITestingLib')
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+
